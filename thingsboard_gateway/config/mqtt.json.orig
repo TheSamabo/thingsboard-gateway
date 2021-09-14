@@ -1,0 +1,94 @@
+{
+<<<<<<< HEAD
+"broker": {
+    "host":"127.0.0.1",
+=======
+  "broker": {
+    "name": "Default Local Broker",
+    "host": "127.0.0.1",
+>>>>>>> 4762b10826df96739ff2406da92e4d944c722781
+    "port": 1883,
+    "clientId": "ThingsBoard_gateway",
+    "maxMessageNumberPerWorker": 10,
+    "maxNumberOfWorkers": 100,
+    "security": {
+      "type": "anonymous"
+    }
+  },
+  "mapping": [
+    {
+      "topicFilter": "shellies/+/sensor/#",
+      "converter": {
+        "type": "custom",
+        "deviceNameTopicExpression": "(?<=shellies\/)(?>\/)|[^\/]+",
+        "deviceTypeTopicExpression": "Thermometer",
+        "extension": "ShellyConverter"
+     }
+    },
+    {
+      "topicFilter": "shellies/+/emeter/#",
+      "converter": {
+      	"type": "custom",
+        "deviceNameTopicExpression": "(?<=shellies\/)(?>\/)|[^\/]+",
+        "deviceTypeTopicExpression": "E-Meter",
+        "extension": "ShellyConverter"
+      }
+    },
+    {
+      "topicFilter": "shellies/+/relay/#",
+      "converter": {
+<<<<<<< HEAD
+      	"type": "custom",
+        "deviceNameTopicExpression": "(?<=shellies\/)(?>\/)|[^\/]+",
+        "deviceTypeTopicExpression": "Relay\/Meter",
+        "extension": "ShellyConverter"
+=======
+        "type": "custom",
+        "extension": "CustomMqttUplinkConverter",
+        "extension-config": {
+          "temperatureBytes": 2,
+          "humidityBytes": 2,
+          "batteryLevelBytes": 1
+        }
+>>>>>>> 4762b10826df96739ff2406da92e4d944c722781
+      }
+    },
+    {
+      "topicFilter": "shellies/+/temperature",
+      "converter": {
+      	"type": "custom",
+        "deviceNameTopicExpression": "(?<=shellies\/)(?>\/)|[^\/]+",
+        "deviceTypeTopicExpression": "GeneralShelly",
+        "extension": "ShellyConverter"
+      }
+    },
+    {
+       "topicFilter": "tele/+/+/SENSOR",
+       "converter": {
+         "type": "custom",
+         "deviceNameJsonExpression": "${*.Name}",
+         "deviceTypeTopicExpression": "${placeholder}",
+	       "extension": "ZbTasmotaConverter"
+       }
+     }
+  ],
+  "connectRequests": [
+    {
+      "topicFilter": "tele/+/+/SENSOR",
+      "deviceNameJsonExpression": "${*.Name}"
+    },
+    {
+      "topicFilter": "shellies/announce",
+      "deviceNameJsonExpression": "${id}"
+    }
+  ],
+  "serverSideRpc": [
+    {
+      "deviceNameFilter": ".*",
+      "methodFilter": "setRelay",
+      "requestTopicExpression": "shellies/${deviceName}/relay/${relayId}/command",
+      "valueExpression": "${value}"
+    }
+  ]
+}
+

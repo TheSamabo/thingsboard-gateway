@@ -5,6 +5,7 @@ thingsboard_gateway/develop_tests/
 thingsboard_gateway/logs/*
 thingsboard_gateway/config/connected_devices.json
 thingsboard_gateway/storage/data/
+thingsboard_gateway.egg-info
 .idea/
 /build/
 /deb_dist/

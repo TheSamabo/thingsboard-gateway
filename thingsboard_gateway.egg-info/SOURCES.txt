@@ -1,4 +1,5 @@
 LICENSE
+MANIFEST.in
 README.md
 setup.py
 thingsboard_gateway/__init__.py
@@ -13,12 +14,11 @@ thingsboard_gateway/config/bacnet.json
 thingsboard_gateway/config/ble.json
 thingsboard_gateway/config/can.json
 thingsboard_gateway/config/custom_serial.json
+thingsboard_gateway/config/ftp.json
 thingsboard_gateway/config/logs.conf
 thingsboard_gateway/config/modbus.json
-thingsboard_gateway/config/modbus_LE-03MW-CT.json
 thingsboard_gateway/config/modbus_serial.json
 thingsboard_gateway/config/mqtt.json
-thingsboard_gateway/config/mqtt_debug.json
 thingsboard_gateway/config/odbc.json
 thingsboard_gateway/config/opcua.json
 thingsboard_gateway/config/request.json
@@ -104,6 +104,7 @@ thingsboard_gateway/extensions/serial/custom_serial_connector.py
 thingsboard_gateway/extensions/serial/custom_serial_converter.py
 thingsboard_gateway/extensions/snmp/__init__.py
 thingsboard_gateway/gateway/__init__.py
+thingsboard_gateway/gateway/configuration_wizard.py
 thingsboard_gateway/gateway/constants.py
 thingsboard_gateway/gateway/tb_client.py
 thingsboard_gateway/gateway/tb_gateway_service.py

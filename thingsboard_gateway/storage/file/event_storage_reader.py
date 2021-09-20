@@ -16,6 +16,15 @@ from base64 import b64decode
 from io import BufferedReader, FileIO
 from os import remove
 from os.path import exists
+<<<<<<< HEAD:thingsboard_gateway/storage/file/event_storage_reader.py
+from time import sleep
+from base64 import b64decode
+from simplejson import load, JSONDecodeError, dumps
+from thingsboard_gateway.storage.file.file_event_storage import log
+from thingsboard_gateway.storage.file.event_storage_files import EventStorageFiles
+from thingsboard_gateway.storage.file.file_event_storage_settings import FileEventStorageSettings
+from thingsboard_gateway.storage.file.event_storage_reader_pointer import EventStorageReaderPointer
+=======
 
 from simplejson import JSONDecodeError, dumps, load
 
@@ -23,6 +32,7 @@ from thingsboard_gateway.storage.event_storage_files import EventStorageFiles
 from thingsboard_gateway.storage.event_storage_reader_pointer import EventStorageReaderPointer
 from thingsboard_gateway.storage.file_event_storage import log
 from thingsboard_gateway.storage.file_event_storage_settings import FileEventStorageSettings
+>>>>>>> 4762b10826df96739ff2406da92e4d944c722781:thingsboard_gateway/storage/event_storage_reader.py
 
 
 class EventStorageReader:

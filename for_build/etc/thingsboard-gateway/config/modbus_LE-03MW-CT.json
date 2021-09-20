@@ -9,7 +9,7 @@
     "devices": [
       {
         "unitId": 1,
-        "deviceName": "Inepro380CT2",
+        "deviceName": "Elektromer1",
         "attributesPollPeriod": 600000,
         "timeseriesPollPeriod": 10000,
         "sendDataOnlyOnChange": false,

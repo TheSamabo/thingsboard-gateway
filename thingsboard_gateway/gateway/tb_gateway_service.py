@@ -4,7 +4,7 @@
 #     you may not use this file except in compliance with the License.
 #     You may obtain a copy of the License at
 #
-#         http://www.apache.org/licenses/LICENSE-2.0
+#         http:///www.apache.org/licenses/LICENSE-2.0
 #
 #     Unless required by applicable law or agreed to in writing, software
 #     distributed under the License is distributed on an "AS IS" BASIS,
@@ -59,7 +59,7 @@ DEFAULT_CONNECTORS = {
     "rest": "RESTConnector",
     "snmp": "SNMPConnector",
     "ftp": "FTPConnector"
-    }
+}
 
 
 class TBGatewayService:
@@ -74,6 +74,8 @@ class TBGatewayService:
             self.__config = safe_load(general_config)
 
         self._config_dir = path.dirname(path.abspath(config_file)) + path.sep
+
+        # Initialize logging
         logging_error = None
         try:
             logging.config.fileConfig(self._config_dir + "logs.conf", disable_existing_loggers=False)
@@ -88,6 +90,7 @@ class TBGatewayService:
         self.__updates_check_time = 0
         self.version = self.__updater.get_version()
         log.info("ThingsBoard IoT gateway version: %s", self.version["current_version"])
+
         self.available_connectors = {}
         self.__connector_incoming_messages = {}
         self.__saved_devices = {}
@@ -164,8 +167,10 @@ class TBGatewayService:
         self._connect_with_connectors()
 
         self._published_events = Queue(-1)
-        self._send_thread = Thread(target=self.__read_data_from_storage, daemon=True,
-                                   name="Send data to Thingsboard Thread")
+
+
+        self.dataPackToCluster = {}
+        self._send_thread = Thread(target=self.__read_data_from_storage, daemon=True, name="Send data to Thingsboard Thread")
         self._send_thread.start()
         log.info("Gateway started.")
 
@@ -431,19 +436,18 @@ class TBGatewayService:
                     else:
                         data["telemetry"] = {"ts": int(time() * 1000), "values": telemetry}
 
-                    if self.__config["storage"]["type"] != "sqlite":
+                    if self.__config["storage"]["type"] != "sqlite": 
                         json_data = dumps(data)
                         save_result = self._event_storage.put(json_data)
-
                     else:
                         save_result = self._event_storage.put(data)
-                    
                     if not save_result:
                         log.error('Data from the device "%s" cannot be saved, connector name is %s.',
                                   data["deviceName"],
                                   connector_name)
             except Exception as e:
                 log.error(e)
+
 
     def check_size(self, size, devices_data_in_event_pack):
         if size >= 48000:
@@ -688,7 +692,10 @@ class TBGatewayService:
         data_to_send = {}
         for device in self.__connected_devices:
             if self.__connected_devices[device]["connector"] is not None:
-                data_to_send[device] = self.__connected_devices[device]["connector"].get_name()
+                if isinstance(self.__connected_devices[device]["connector"], str):
+                    data_to_send[device] = self.__connected_devices[device]["connector"]
+                if isinstance(self.__connected_devices[device]["connector"], object):
+                    data_to_send[device] = self.__connected_devices[device]["connector"].get_name()
         return {"code": 200, "resp": data_to_send}
 
     def __rpc_update(self, *args):
@@ -782,6 +789,7 @@ class TBGatewayService:
             summary_messages.update(**telemetry)
         return summary_messages
 
+    # TODO: This needs a lot of clean up
     def add_device(self, device_name, content, device_type=None):
 
         if self.__config["storage"]["type"] == "file":
@@ -875,6 +883,7 @@ class TBGatewayService:
         else:
             log.debug("No device found in connected device file.")
             self.__connected_devices = {} if self.__connected_devices is None else self.__connected_devices
+    
 
     def __save_persistent_devices(self):
         with open(self._config_dir + self.__connected_devices_file, 'w') as config_file:
